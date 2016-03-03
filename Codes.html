@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/> 
+<title>验证码 dome</title>
+<link rel="shortcut icon" href="static/bitbug_favicon.ico"> 
+<!--[if lte IE 9]>
+<script src="static/js/respond.min.js"></script>
+<script src="static/js/html5.js"></script>
+<![endif]-->
+<script type="text/javascript" src="js/Codes.js"></script>
+<style type="text/css">
+
+    #codeShowBox{
+        width: 80px;
+        height: 40px;
+        line-height: 50px;
+        display: inline-block;
+    }
+
+    input, select, textarea, button {
+        font: 13px/1.4 Helvetica,arial,nimbussansl,liberationsans,freesans,clean,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    }
+
+    body {
+        background-color: #fff;
+        color: #333;
+        font: 13px/1.4 Helvetica,arial,nimbussansl,liberationsans,freesans,clean,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    }
+
+    .select-text {
+        padding: 10px;
+    }
+
+    .select-text p {
+        display: inline-block;
+    }
+
+    .buttonCode {
+        border: medium none;
+        cursor: pointer;
+        height: 38px;
+        position: relative;
+        width: 200px;
+        margin: 10px 60px;
+        -moz-user-select: none;
+        background-color: #eee;
+        background-image: linear-gradient(#fcfcfc, #eee);
+        border: 1px solid #d5d5d5;
+        border-radius: 3px;
+        color: #333;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 20px;
+        padding: 6px 12px;
+        position: relative;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    #codetext{
+        background-color: #fff;
+        background-position: right 8px center;
+        background-repeat: no-repeat;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075) inset;
+        color: #333;
+        font-size: 13px;
+        line-height: 20px;
+        outline: medium none;
+        padding: 6px 12px;
+        vertical-align: middle;
+    }
+
+
+    .center {
+        width: 360px;
+        padding: 15px;
+        border-radius: 8px;
+        margin:10% auto;
+        box-shadow: 0 0 5px rgba(0,0,0,.5);
+    }
+
+    .prompt {
+        margin: 10px 0 10px 60px;
+        color: #666;
+    }
+
+</style>
+</head>
+<body>
+<div class="center">
+    <div class="select-text">
+        <p>验证码</p>
+        <b class="navber-left">：</b>
+        <input id="codetext" class="input-hright input-text" type="txet"/>
+        <div id="codeShowBox"></div>
+        <div class="prompt">请点击后输入验证码，字母不区分大小写</div>
+    </div>
+    <div class="col-lg-12 nn-net-margin">
+        <button type="button" class="buttonCode" value="提交" id="submit">提交验证码</button>
+    </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var codetext = document.getElementById('codetext');
+    var codeShowBox = document.getElementById('codeShowBox');
+    var submit = document.getElementById('submit');
+
+    var c = ["+", "-", "*", "/"];
+    var arr = [];
+
+    for (var i = 0; i < 1000; i++) {
+
+        var num = parseInt(Math.random() * 100 + 1);
+        var mummath = parseInt(Math.random() * 100 + 1);
+        var numpar = parseInt(Math.random() * 4);
+
+        if (c[numpar] === '/') {
+            var x = num % mummath;
+            if (x != 0) {
+                num -= x;
+
+                if(num==0){
+                    var temp = num;
+                    mummath = num;
+                    num = temp;
+                }
+
+            }
+        }
+
+        if(num==0&&num==0){
+            continue;
+        }
+
+        var str = num + c[numpar] + mummath;
+
+        arr.push(str);
+
+    }
+    var c = new KinerCode({
+        len: 4,//需要产生的验证码长度
+//        chars: ["1+2","3+15","6*8","8/4","22-15"],//问题模式:指定产生验证码的词典，若不给或数组长度为0则试用默认字典
+        chars: [
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        ],//经典模式:指定产生验证码的词典，若不给或数组长度为0则试用默认字典
+        question: false,//若给定词典为算数题，则此项必须选择true
+        copy: false,//是否允许复制产生的验证码
+        bgColor: "",//背景颜色[与背景图任选其一设置]
+        bgImg: "bg.jpg",//若选择背景图片，则背景颜色失效
+        randomBg: false,//若选true则采用随机背景颜色，此时设置的bgImg和bgColor将失效
+        inputArea: codetext,//输入验证码的input对象绑定
+        codeArea: codeShowBox,//验证码放置的区域
+        click2refresh: true,//是否点击验证码刷新验证码
+        false2refresh: true,//在填错验证码后是否刷新验证码
+        validateObj: submit,//触发验证的对象，若不指定则默认为已绑定的输入框inputArea
+        validateEven: "click",//触发验证的方法名，如click，blur等
+        validateFn: function (result, codeShowBox) {
+            if (result) {
+                window.open('https://github.com/gouqingping');
+            } else {
+                if (this.opt.question) {
+                    alert("请输入正确的验证码！");
+                    
+                } else {
+                    alert("请输入正确的验证码！");
+                }
+            }
+        }
+    });
+</script>
